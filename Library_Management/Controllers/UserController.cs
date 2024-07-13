@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Library_Management.Data;
 using Library_Management.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
+using System.Security.Claims;
 
 namespace Library_Management.Controllers
 {
@@ -63,6 +66,50 @@ namespace Library_Management.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(user);
+        }
+        // GET: User/Login
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        // POST: User/Login
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login([Bind("Email,Password")] User user)
+        {
+            if (ModelState.IsValid)
+            {
+                var validUser = _context.User.ToList().Where(u => u.Email == user.Email && u.Password == user.Password).ToList();
+                if (validUser.Count > 0)
+                {
+                   
+                        var claims = new List<Claim>();
+                        var claim = new Claim(ClaimTypes.Email, user.Email);
+                     
+                        claims.Add(claim);
+   
+                        var claimIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                        var claimPrincipal = new ClaimsPrincipal(claimIdentity);
+                        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimPrincipal);
+                        return RedirectToAction("Index", "Home");
+
+                }
+                else
+                {
+                    ViewData["Message"] = "Username or password incorrect";
+                }
+            }
+            return View(user);
+        }
+        // GET: User/Logout
+        public IActionResult Logout()
+        {
+            HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Login", "User");
+
         }
 
         // GET: User/Edit/5
