@@ -2,20 +2,28 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Library_Management.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Hosting;
+
 var builder = WebApplication.CreateBuilder(args);
+
+// Configure DbContext
 builder.Services.AddDbContext<Library_ManagementContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Library_ManagementContext") ?? throw new InvalidOperationException("Connection string 'Library_ManagementContext' not found.")));
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options => options.LoginPath = new PathString("/User/Login"));
-// Add services to the container.
+
+// Configure authentication
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options => options.LoginPath = "/User/Login");
+
+// Add services to the container
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Configure the HTTP request pipeline
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
@@ -24,7 +32,21 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+// Authentication middleware
+app.UseAuthentication();
 app.UseAuthorization();
+
+// Custom middleware for redirection based on authentication status
+app.Use(async (context, next) =>
+{
+    // If the user is logged in and the request is for the root URL, redirect to Home
+    if (context.Request.Path == "/" && context.User.Identity.IsAuthenticated)
+    {
+        context.Response.Redirect("/Home/Index");
+        return;
+    }
+    await next();
+});
 
 app.MapControllerRoute(
     name: "default",

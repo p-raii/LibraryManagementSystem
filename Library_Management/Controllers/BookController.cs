@@ -54,16 +54,42 @@ namespace Library_Management.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,CategoryId,Avability,BookPhoto")] Book book)
+        public async Task<IActionResult> Create([Bind("Id,Title,CategoryId,Avability,BookPhoto")] Book book, IFormFile photo)
         {
             if (ModelState.IsValid)
             {
+                Guid guid = Guid.NewGuid();
+                string fileEx = photo.FileName.Substring(photo.FileName.LastIndexOf('.'));
+                String path = Environment.CurrentDirectory + "/wwwroot/images/" + guid + fileEx;
+                FileStream filestream = new FileStream(path, FileMode.Create);
+                await photo.CopyToAsync(filestream);
+                book.BookPhoto = guid + fileEx;
                 _context.Add(book);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(book);
         }
+        // GET: Book/Availability
+        public IActionResult Availability()
+        {
+            return View();
+        }
+
+        // POST: Book/Availability
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Availability([Bind("Id,Title,CategoryId,Avability,BookPhoto")] Book book)
+        {
+            if (ModelState.IsValid)
+            {
+
+            }
+            return View(book);
+        }
+
 
         // GET: Book/Edit/5
         public async Task<IActionResult> Edit(int? id)

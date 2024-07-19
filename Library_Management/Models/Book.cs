@@ -1,4 +1,6 @@
-﻿namespace Library_Management.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Library_Management.Models
 {
     public class Book
     {
@@ -6,6 +8,6 @@
         public string Title { get; set; }
         public int CategoryId { get; set; }
         public bool Avability  { get; set; }
-        public string BookPhoto { get; set; }
+        public string? BookPhoto { get; set; }
     }
 }
