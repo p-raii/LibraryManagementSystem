@@ -10,6 +10,7 @@
 </head>
 <body>
     <header>
+
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><b>LM</b></a>
@@ -32,17 +33,20 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Index">Manage User</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Category" asp-action="Index">Manage Category</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Category" asp-action="Index">CategoryDetails</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Book" asp-action="Index">Manage Books</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Book" asp-action="Index">BooksDetails</a>
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Student" asp-action="Index">Manage Students</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Student" asp-action="Index">StudentsDetails</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Book" asp-action="Availability">Availability</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Lend" asp-action="Index">BookLendingDetails</a>
                             </li>
                         </ul>
                         <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Logout">Logout</a>
@@ -51,6 +55,8 @@
 
             </div>
         </nav>
+
+         
     </header>
     <div class="container">
         <main role="main" class="pb-3">

@@ -18,5 +18,6 @@ namespace Library_Management.Data
         public DbSet<Library_Management.Models.Book> Book { get; set; } = default!;
         public DbSet<Library_Management.Models.Category> Category { get; set; } = default!;
         public DbSet<Library_Management.Models.Student> Student { get; set; } = default!;
+        public DbSet<Library_Management.Models.Lend> Lend { get; set; } = default!;
     }
 }

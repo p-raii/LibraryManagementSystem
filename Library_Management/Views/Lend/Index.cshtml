@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Library_Management.Models.Book>
+﻿@model IEnumerable<Library_Management.Models.Lend>
 
 @{
     ViewData["Title"] = "Index";
@@ -13,16 +13,19 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Title)
+                @Html.DisplayNameFor(model => model.Bid)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CategoryId)
+                @Html.DisplayNameFor(model => model.Sid)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Avability)
+                @Html.DisplayNameFor(model => model.Issue_date)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.BookPhoto)
+                @Html.DisplayNameFor(model => model.Return_date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
             </th>
             <th></th>
         </tr>
@@ -31,16 +34,19 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Title)
+                @Html.DisplayFor(modelItem => item.Bid)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CategoryId)
+                @Html.DisplayFor(modelItem => item.Sid)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Avability)
+                @Html.DisplayFor(modelItem => item.Issue_date)
             </td>
             <td>
-                <img src="/images/@item.BookPhoto" height="100" width="100">
+                @Html.DisplayFor(modelItem => item.Return_date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
