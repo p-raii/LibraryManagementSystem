@@ -19,12 +19,34 @@ namespace Library_Management.Controllers
             _context = context;
         }
 
-        // GET: Book
-        public async Task<IActionResult> Index()
-        {
-            return View(await _context.Book.ToListAsync());
-        }
 
+        // GET: Book
+        public async Task<IActionResult> Index(string searchString)
+        {
+            var books = from b in _context.Book
+                        select b;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                var lowerSearchString = searchString.ToLower();
+                books = books.Where(s => s.Title.ToLower().Contains(lowerSearchString));
+            }
+
+            return View(await books.ToListAsync());
+            
+        }
+        public async Task<IActionResult> Availability()
+        {
+            var books = from b in _context.Book
+                        select b;
+
+            var a = true;
+            books = books.Where(s => s.Avability== a);
+            
+
+            return View(await books.ToListAsync());
+
+        }
         // GET: Book/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -67,25 +89,6 @@ namespace Library_Management.Controllers
                 _context.Add(book);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
-            }
-            return View(book);
-        }
-        // GET: Book/Availability
-        public IActionResult Availability()
-        {
-            return View();
-        }
-
-        // POST: Book/Availability
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Availability([Bind("Id,Title,CategoryId,Avability,BookPhoto")] Book book)
-        {
-            if (ModelState.IsValid)
-            {
-
             }
             return View(book);
         }

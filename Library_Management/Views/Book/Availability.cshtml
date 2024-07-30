@@ -1,23 +1,11 @@
-﻿@model IEnumerable<Library_Management.Models.Student>
+﻿@model IEnumerable<Library_Management.Models.Book>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Availabile";
 }
 
-<h1>Index</h1>
+<h1>Availabile Books</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-
-<form asp-action="Index" method="get">
-    <div class="form-group">
-        <input type="text" class="form-control" name="searchString" placeholder="Search by name or Id" />
-    </div>
-    <button type="submit" class="btn btn-primary">Search</button>
-    <a asp-action="Index"><button class="btn btn-primary">Display All</button></a>
-
-</form>
 <table class="table">
     <thead>
         <tr>
@@ -25,13 +13,16 @@
                 @Html.DisplayNameFor(model => model.Id)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                @Html.DisplayNameFor(model => model.Title)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.BookId)
+                @Html.DisplayNameFor(model => model.CategoryId)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Faculty)
+                @Html.DisplayNameFor(model => model.Avability)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BookPhoto)
             </th>
             <th></th>
         </tr>
@@ -43,13 +34,16 @@
                     @Html.DisplayFor(modelItem => item.Id)
                 </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Name)
+                @Html.DisplayFor(modelItem => item.Title)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.BookId)
+                @Html.DisplayFor(modelItem => item.CategoryId)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Faculty)
+                @Html.DisplayFor(modelItem => item.Avability)
+            </td>
+            <td>
+                <img src="/images/@item.BookPhoto" height="100" width="100">
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

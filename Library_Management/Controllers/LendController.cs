@@ -20,9 +20,20 @@ namespace Library_Management.Controllers
         }
 
         // GET: Lend
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? searchString)
         {
-            return View(await _context.Lend.ToListAsync());
+            var stubook = from b in _context.Lend
+                        select b;
+
+            if (searchString.HasValue)
+            {
+                    
+                        // Search by ID
+                   stubook = stubook.Where(s => s.Id == searchString);
+                   
+            }
+
+            return View(await stubook.ToListAsync());
         }
 
         // GET: Lend/Details/5
@@ -58,11 +69,21 @@ namespace Library_Management.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(lend);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    _context.Add(lend);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (DbUpdateException ex)
+                {
+               
+                     ModelState.AddModelError("", "Unable to save changes. Book already issued");
+                    
+                }
             }
             return View(lend);
+            
         }
 
         // GET: Lend/Edit/5

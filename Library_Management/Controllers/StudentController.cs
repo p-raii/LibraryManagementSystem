@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Library_Management.Data;
 using Library_Management.Models;
+using static System.Reflection.Metadata.BlobBuilder;
 
 namespace Library_Management.Controllers
 {
@@ -20,9 +21,26 @@ namespace Library_Management.Controllers
         }
 
         // GET: Student
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
-            return View(await _context.Student.ToListAsync());
+            var stu = from b in _context.Student
+                        select b;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                if (int.TryParse(searchString, out int id))
+                {
+                    // Search by ID
+                    stu = stu.Where(s => s.Id == id);
+                }
+                else
+                {
+                    var lowerSearchString = searchString.ToLower();
+                    stu = stu.Where(s => s.Name.ToLower().Contains(lowerSearchString));
+                }
+            }
+
+            return View(await stu.ToListAsync());
         }
 
         // GET: Student/Details/5
